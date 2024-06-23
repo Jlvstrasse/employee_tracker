@@ -1,20 +1,21 @@
-const dbPool = require('./connection');
+const pool = require('./connection');
 
 const retrieveDepartments = () => {
   return new Promise((resolve, reject) => {
-    dbPool.query('SELECT * FROM department', (error, result) => {
+    pool.query('SELECT * FROM department', (error, result) => {
       if (error) {
         console.error('Error retrieving departments:', error);
         reject(error);
+      } else {
+        resolve(result ? result.rows : []);
       }
-      resolve(result.rows);
     });
   });
 };
 
 const retrieveRoles = () => {
   return new Promise((resolve, reject) => {
-    dbPool.query(
+    pool.query(
       `SELECT role.id AS role_id, role.title, role.salary, role.department_id, 
               employee.id AS employee_id, employee.first_name, employee.last_name, 
               employee.role_id AS employee_role_id, employee.manager_id 
@@ -24,8 +25,9 @@ const retrieveRoles = () => {
         if (error) {
           console.error('Error retrieving roles:', error);
           reject(error);
+        } else {
+          resolve(result ? result.rows : []);
         }
-        resolve(result.rows);
       }
     );
   });

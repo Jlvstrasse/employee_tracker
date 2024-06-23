@@ -1,16 +1,9 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 const inquirer = require('inquirer');
-const consoleTable = require('console.table'); 
+const consoleTable = require('console.table');
 
-const dbPool = new Pool({
-  user: process.env.DB_USER,
-  host: 'localhost',
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-});
-
-console.log('Connected to the employee_management database.');
+const dbPool = require('./db/connection');
 
 const { retrieveDepartments, retrieveRoles } = require('./db/queries');
 
@@ -60,7 +53,7 @@ const viewAllRoles = async () => {
   await startApp();
 };
 
-// Defined other handlers similar to viewAllDepartments and viewAllRoles
+// Define other handlers similar to viewAllDepartments and viewAllRoles
 
 const startApp = async () => {
   const action = await mainMenuPrompt();
@@ -72,7 +65,7 @@ const startApp = async () => {
     case 'View All Roles':
       await viewAllRoles();
       break;
-    // Added cases for other actions and corresponding handlers
+    // Add cases for other actions and corresponding handlers
     default:
       console.log('Goodbye!');
       process.exit();
@@ -80,6 +73,3 @@ const startApp = async () => {
 };
 
 startApp();
-
-
-
