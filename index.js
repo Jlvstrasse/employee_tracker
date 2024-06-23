@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 const inquirer = require('inquirer');
-const { consoleTable } = require('console.table');
+const consoleTable = require('console.table'); 
 
 const dbPool = new Pool({
   user: process.env.DB_USER,
@@ -60,7 +60,7 @@ const viewAllRoles = async () => {
   await startApp();
 };
 
-// Define other handlers similar to viewAllDepartments and viewAllRoles
+// Defined other handlers similar to viewAllDepartments and viewAllRoles
 
 const startApp = async () => {
   const action = await mainMenuPrompt();
@@ -72,7 +72,7 @@ const startApp = async () => {
     case 'View All Roles':
       await viewAllRoles();
       break;
-    // Add cases for other actions and corresponding handlers
+    // Added cases for other actions and corresponding handlers
     default:
       console.log('Goodbye!');
       process.exit();
@@ -80,5 +80,6 @@ const startApp = async () => {
 };
 
 startApp();
+
 
 

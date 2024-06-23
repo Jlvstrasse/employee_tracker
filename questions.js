@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const { retrieveDepartments, retrieveRoles } = require('./db/queries');
-const { consoleTable } = require('console.table');
+const consoleTable = require('console.table'); 
 
 const promptMainMenu = async () => {
   const { option } = await inquirer.prompt({
@@ -48,7 +48,7 @@ const viewRoles = async () => {
   await startApp();
 };
 
-// Define other handlers similar to viewDepartments and viewRoles
+// Defined other handlers similar to viewDepartments and viewRoles
 
 const startApp = async () => {
   const action = await promptMainMenu();
@@ -60,7 +60,7 @@ const startApp = async () => {
     case 'View All Roles':
       await viewRoles();
       break;
-    // Add cases for other actions and corresponding handlers
+    // Added cases for other actions and corresponding handlers
     default:
       console.log('Goodbye!');
       process.exit();
@@ -68,4 +68,5 @@ const startApp = async () => {
 };
 
 startApp();
+
 
