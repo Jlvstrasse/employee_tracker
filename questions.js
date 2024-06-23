@@ -1,122 +1,71 @@
 const inquirer = require('inquirer');
+const { retrieveDepartments, retrieveRoles } = require('./db/queries');
+const { consoleTable } = require('console.table');
 
-const mainMenu = () => {
-  return inquirer.prompt([
-    {
-      type: 'list',
-      name: 'action',
-      message: 'What would you like to do?',
-      choices: [
-        'View all departments',
-        'View all roles',
-        'View all employees',
-        'Add a department',
-        'Add a role',
-        'Add an employee',
-        'Update an employee role',
-        'Exit'
-      ]
-    }
-  ]);
+const promptMainMenu = async () => {
+  const { option } = await inquirer.prompt({
+    type: 'list',
+    name: 'option',
+    message: 'Select an option:',
+    choices: [
+      'View All Departments',
+      'View All Roles',
+      'View All Employees',
+      'Add Department',
+      'Add Role',
+      'Add Employee',
+      'Update Employee Role',
+      'Update Employee Manager',
+      'View Employees by Manager',
+      'View Employees by Department',
+      'Delete Department',
+      'Delete Role',
+      'Delete Employee',
+      'View Total Utilized Budget of Department',
+    ],
+  });
+
+  return option;
 };
 
-const addDepartmentPrompt = () => {
-  return inquirer.prompt([
-    {
-      type: 'input',
-      name: 'name',
-      message: 'Enter the department name:'
-    }
-  ]);
+const viewDepartments = async () => {
+  try {
+    const departments = await retrieveDepartments();
+    consoleTable(departments);
+  } catch (error) {
+    console.error('Error viewing departments:', error);
+  }
+  await startApp();
 };
 
-const addRolePrompt = async (departments) => {
-  return inquirer.prompt([
-    {
-      type: 'input',
-      name: 'title',
-      message: 'Enter the role title:'
-    },
-    {
-      type: 'input',
-      name: 'salary',
-      message: 'Enter the role salary:'
-    },
-    {
-      type: 'list',
-      name: 'department_id',
-      message: 'Select the department:',
-      choices: departments.map(department => ({
-        name: department.name,
-        value: department.id
-      }))
-    }
-  ]);
+const viewRoles = async () => {
+  try {
+    const roles = await retrieveRoles();
+    consoleTable(roles);
+  } catch (error) {
+    console.error('Error viewing roles:', error);
+  }
+  await startApp();
 };
 
-const addEmployeePrompt = async (roles, managers) => {
-  return inquirer.prompt([
-    {
-      type: 'input',
-      name: 'first_name',
-      message: 'Enter the employee first name:'
-    },
-    {
-      type: 'input',
-      name: 'last_name',
-      message: 'Enter the employee last name:'
-    },
-    {
-      type: 'list',
-      name: 'role_id',
-      message: 'Select the role:',
-      choices: roles.map(role => ({
-        name: role.title,
-        value: role.id
-      }))
-    },
-    {
-      type: 'list',
-      name: 'manager_id',
-      message: 'Select the manager:',
-      choices: [
-        { name: 'None', value: null },
-        ...managers.map(manager => ({
-          name: `${manager.first_name} ${manager.last_name}`,
-          value: manager.id
-        }))
-      ]
-    }
-  ]);
+// Define other handlers similar to viewDepartments and viewRoles
+
+const startApp = async () => {
+  const action = await promptMainMenu();
+
+  switch (action) {
+    case 'View All Departments':
+      await viewDepartments();
+      break;
+    case 'View All Roles':
+      await viewRoles();
+      break;
+    // Add cases for other actions and corresponding handlers
+    default:
+      console.log('Goodbye!');
+      process.exit();
+  }
 };
 
-const updateEmployeeRolePrompt = async (employees, roles) => {
-  return inquirer.prompt([
-    {
-      type: 'list',
-      name: 'employee_id',
-      message: 'Select the employee:',
-      choices: employees.map(employee => ({
-        name: `${employee.first_name} ${employee.last_name}`,
-        value: employee.id
-      }))
-    },
-    {
-      type: 'list',
-      name: 'role_id',
-      message: 'Select the new role:',
-      choices: roles.map(role => ({
-        name: role.title,
-        value: role.id
-      }))
-    }
-  ]);
-};
+startApp();
 
-module.exports = {
-  mainMenu,
-  addDepartmentPrompt,
-  addRolePrompt,
-  addEmployeePrompt,
-  updateEmployeeRolePrompt
-};
