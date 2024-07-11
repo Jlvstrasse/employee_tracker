@@ -1,7 +1,7 @@
 require('dotenv').config();
 const inquirer = require('inquirer');
 const { Pool } = require('pg');
-const queries = require('./db/queries');
+const queries = require('./db/queries'); // Ensure this path is correct
 const questions = require('./questions');
 
 const pool = new Pool({
@@ -44,3 +44,4 @@ const mainMenu = async () => {
 };
 
 mainMenu();
+
